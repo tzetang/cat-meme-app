@@ -39,23 +39,23 @@ const CAT_QUOTES: CatQuote[] = [
     author: "Terry Pratchett"
   },
   {
-    quote: "Cats are like music. It's foolish to try to explain their worth to those who don't appreciate them.",
+    quote: "Cats are like music. It&apos;s foolish to try to explain their worth to those who don&apos;t appreciate them.",
     author: "Unknown"
   },
   {
-    quote: "A cat's eyes are windows enabling us to see into another world.",
+    quote: "A cat&apos;s eyes are windows enabling us to see into another world.",
     author: "Irish Proverb"
   },
   {
-    quote: "Cats are the ultimate narcissists. You can tell this by all the time they spend on personal grooming. Dogs aren't like this. A dog's idea of personal grooming is to roll in a dead fish.",
+    quote: "Cats are the ultimate narcissists. You can tell this by all the time they spend on personal grooming. Dogs aren&apos;t like this. A dog&apos;s idea of personal grooming is to roll in a dead fish.",
     author: "James Gorman"
   },
   {
-    quote: "Cats are smarter than dogs. You can't get eight cats to pull a sled through snow.",
+    quote: "Cats are smarter than dogs. You can&apos;t get eight cats to pull a sled through snow.",
     author: "Jeff Valdez"
   },
   {
-    quote: "Cats are the ultimate Zen masters. They live in the moment, they don't hold grudges, and they don't worry about the future.",
+    quote: "Cats are the ultimate Zen masters. They live in the moment, they don&apos;t hold grudges, and they don&apos;t worry about the future.",
     author: "Unknown"
   }
 ];
@@ -151,7 +151,7 @@ const CatMemePage: NextPage = () => {
 
             {catQuote && (
               <div className="mb-8 p-6 bg-gray-50 rounded-xl">
-                <p className="text-xl text-gray-700 italic mb-2">"{catQuote.quote}"</p>
+                <p className="text-xl text-gray-700 italic mb-2">&ldquo;{catQuote.quote}&rdquo;</p>
                 <p className="text-gray-600">- {catQuote.author}</p>
               </div>
             )}
