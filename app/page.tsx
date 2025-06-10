@@ -1,103 +1,174 @@
-import Image from "next/image";
+"use client";
+import type { NextPage } from 'next';
+import React, { useState, useEffect } from 'react';
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+// Define a TypeScript interface for the data we expect from the API.
+// This helps with type safety and auto-completion.
+interface CatImage {
+  id: string;
+  url: string;
+  width: number;
+  height: number;
 }
+
+interface CatQuote {
+  quote: string;
+  author: string;
+}
+
+// Curated list of cat quotes
+const CAT_QUOTES: CatQuote[] = [
+  {
+    quote: "Time spent with cats is never wasted.",
+    author: "Sigmund Freud"
+  },
+  {
+    quote: "Cats are connoisseurs of comfort.",
+    author: "James Herriot"
+  },
+  {
+    quote: "A cat has absolute emotional honesty: human beings, for one reason or another, may hide their feelings, but a cat does not.",
+    author: "Ernest Hemingway"
+  },
+  {
+    quote: "Cats are intended to teach us that not everything in nature has a purpose.",
+    author: "Garrison Keillor"
+  },
+  {
+    quote: "In ancient times cats were worshipped as gods; they have not forgotten this.",
+    author: "Terry Pratchett"
+  },
+  {
+    quote: "Cats are like music. It's foolish to try to explain their worth to those who don't appreciate them.",
+    author: "Unknown"
+  },
+  {
+    quote: "A cat's eyes are windows enabling us to see into another world.",
+    author: "Irish Proverb"
+  },
+  {
+    quote: "Cats are the ultimate narcissists. You can tell this by all the time they spend on personal grooming. Dogs aren't like this. A dog's idea of personal grooming is to roll in a dead fish.",
+    author: "James Gorman"
+  },
+  {
+    quote: "Cats are smarter than dogs. You can't get eight cats to pull a sled through snow.",
+    author: "Jeff Valdez"
+  },
+  {
+    quote: "Cats are the ultimate Zen masters. They live in the moment, they don't hold grudges, and they don't worry about the future.",
+    author: "Unknown"
+  }
+];
+
+const CatMemePage: NextPage = () => {
+  // State to store the current cat image data.
+  const [catImage, setCatImage] = useState<CatImage | null>(null);
+  // State to handle loading status.
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // State to handle any potential errors during the API fetch.
+  const [error, setError] = useState<string | null>(null);
+  const [catQuote, setCatQuote] = useState<CatQuote | null>(null);
+
+  // Function to get a random cat quote
+  const getRandomCatQuote = () => {
+    const randomIndex = Math.floor(Math.random() * CAT_QUOTES.length);
+    return CAT_QUOTES[randomIndex];
+  };
+
+  // This is the function that will fetch the cat image from the API.
+  const fetchNewCat = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('https://api.thecatapi.com/v1/images/search');
+      if (!response.ok) {
+        throw new Error('Failed to fetch cat image. Please try again.');
+      }
+      const data: CatImage[] = await response.json();
+      if (data && data.length > 0) {
+        setCatImage(data[0]);
+        // Get a random quote from our curated list
+        setCatQuote(getRandomCatQuote());
+      } else {
+        throw new Error('No cat images found.');
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // useEffect with an empty dependency array [] means this code will run once
+  // when the component is first mounted.
+  useEffect(() => {
+    fetchNewCat();
+  }, []); // The empty array ensures this effect runs only once on mount.
+
+  return (
+    <main className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 font-sans">
+      <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10 w-full max-w-lg text-center">
+        {/* Playful title for the app */}
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 mb-8">
+          Your Daily Dose of Cat
+        </h1>
+
+        {/* Display a loading message while fetching data */}
+        {isLoading && (
+          <div className="mb-8">
+            <p className="text-gray-500 text-lg">Finding a cute cat...</p>
+          </div>
+        )}
+
+        {/* Display an error message if the fetch fails */}
+        {error && (
+          <div className="mb-8">
+            <p className="text-red-500 text-lg">{error}</p>
+            <button
+              onClick={fetchNewCat}
+              className="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {/* Display the cat image once it's loaded */}
+        {!isLoading && catImage && (
+          <>
+            <div className="mb-8 h-96 flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden">
+              <img
+                src={catImage.url}
+                alt="A randomly fetched cat"
+                className="object-contain h-full w-full"
+              />
+            </div>
+
+            {catQuote && (
+              <div className="mb-8 p-6 bg-gray-50 rounded-xl">
+                <p className="text-xl text-gray-700 italic mb-2">"{catQuote.quote}"</p>
+                <p className="text-gray-600">- {catQuote.author}</p>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Button to fetch a new cat image */}
+        <button
+          onClick={fetchNewCat}
+          disabled={isLoading}
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-xl transition duration-300 ease-in-out disabled:bg-blue-300 disabled:cursor-not-allowed text-lg"
+        >
+          {isLoading ? 'Loading...' : 'Get Another Cat!'}
+        </button>
+      </div>
+    </main>
+  );
+};
+
+export default CatMemePage;
